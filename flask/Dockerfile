@@ -1,21 +1,16 @@
-# Extend the official Rasa SDK image
-#FROM rasa/rasa-sdk:1.10.1
+FROM python:3
+ADD . /request.py
 
 # Use subdirectory as working directory
-WORKDIR /app
-
-# Copy any additional custom requirements, if necessary (uncomment next line)
-COPY flask/requirements-flask.txt ./
-
-# Change back to root user to install dependencies
-USER root
+WORKDIR /request
 
 # Install extra requirements for actions code, if necessary (uncomment next line)
- RUN pip install -r requirements-actions.txt
+RUN pip3 install flask
+RUN pip3 install flask_cors
+RUN pip3 install requests
 
-# Copy actions folder to working directory
-COPY ./actions /app/flask
+COPY . /request
 
-# By best practices, don't run the code with root user
-USER 1001
-CMD [ "python", "request.py" ]
+ENTRYPOINT [ "python3" ]
+
+CMD ["request.py"]
